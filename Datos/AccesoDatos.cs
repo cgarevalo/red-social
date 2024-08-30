@@ -79,6 +79,20 @@ namespace Datos
             }
         }
 
+        public int EjecutarAccionScalar()
+        {
+            comando.Connection = conexion;
+            try
+            {
+                conexion.Open();
+                return (int)comando.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void SetearParametro(string nombre, object valor)
         {
             // Agrega un parámetro a la consulta SQL, para hacer una consulta más fácil 

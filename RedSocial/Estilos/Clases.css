@@ -1,21 +1,16 @@
 ﻿body {
 }
 
-.form-control::placeholder {
-    color: #d3d3d3; /* Color gris claro */
-    opacity: 1; /* Asegura que el color se aplique completamente */
-}
-
 .custom-link {
-    color: #fff; /* Color del texto */
-    text-decoration: none; /* Eliminar subrayado */
+    color: black;  /*Color del texto*/ 
+    text-decoration: none;  /*Eliminar subrayado*/ 
 }
 
 .custom-link:hover {
-    color: #fff; /* Mantener el color del texto al pasar el mouse */
-    background-color: #555; /* Color de fondo más claro al pasar el mouse */
+    color: #fff;  /*Mantener el color del texto al pasar el mouse*/
+    background-color: #555;  /*Color de fondo más claro al pasar el mouse*/ 
 }
 
 .list-group-item:hover {
-    background-color: #555; /* Color de fondo más claro al pasar el mouse */
+    background-color: #555;  /*Color de fondo más claro al pasar el mouse*/ 
 }

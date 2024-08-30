@@ -10,9 +10,11 @@ namespace Dominio
     {
         public int Id { get; set; }
         public int IdUsuario { get; set; }
+        public string NombreUsuario { get; set; }
         public DateTime Fecha { get; set; }
-        public int IdTipoPublicacion { get; set; }
+        public TipoPublicacion IdTipoPublicacion { get; set; }
         public string Texto { get; set; }
-        public int IdPublicacionCompartida { get; set; }
+        public string FotoPerfil { get; set; }
+        public int? IdPublicacionCompartida { get; set; }
     }
 }

@@ -16,52 +16,102 @@
     <%--JavaScript--%>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <%--JavaScript--%>
+
+    <%--CSS--%>
+    <link href="Estilos/Clases.css" rel="stylesheet" />
+    <%--CSS--%>
 </head>
-<body class="bg-dark">
+<body class="bg-body-secondary">
     <form id="form1" runat="server">
 
-        <nav class="navbar bg-body-tertiary">
+        <nav class="navbar bg-dark navbar-dark">
             <div class="container-fluid">
-                <a class="navbar-brand">Navbar</a>
-                <div class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </div>
-            </div>
-        </nav>
+                <a class="navbar-brand d-none d-xl-block" href="Default.aspx">Carpinchito</a>
 
-        <div class="container">
+                <!-- Botón de menú para pantallas pequeñas -->
+                <button class="navbar-toggler d-xl-none me-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="row">
-
-                <!-- Columna Izquierda: Navegación -->
-                <div class="col-3 d-flex justify-content-start align-items-start border-end">
-                    <ul class="list-group flex-column bg-dark w-100">
-                        <li class="list-group-item bg-dark border-0 w-100">
-                            <a class="custom-link text-light" href="Default.aspx">Inicio</a>
+                <!-- Menú desplegable del botón de arriba ↑ -->
+                <div class="collapse navbar-collapse d-lg-none" id="navbarMenu">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="Default.aspx">Inicio</a>
                         </li>
-                        <li class="list-group-item bg-dark border-0">
-                            <a class="custom-link text-light" href="#">Notificaciones</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Notificaciones</a>
                         </li>
-                        <li class="list-group-item bg-dark border-0">
-                            <a class="custom-link text-light" href="#">Mensajes</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Mensajes</a>
                         </li>
-                        <li class="list-group-item bg-dark border-0">
-                            <a class="custom-link text-light" href="#">Favoritos</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Favoritos</a>
                         </li>
                     </ul>
                 </div>
 
-                <!-- Columna Central: Publicaciones -->
-                <div class="col-6">
-                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                <div class="mx-auto d-flex col-sm-2 col-md-3 col-lg-4" role="search">
+                    <div class="input-group ms-5">
+                        <asp:TextBox ID="txtBuscar" CssClass="form-control" placeholder="Buscar" runat="server"></asp:TextBox>
+                        <asp:Button ID="btnBuscar" CssClass="btn btn-outline-success" runat="server" Text="Buscar" />
+                    </div>
+                </div>
 
-                    </asp:ContentPlaceHolder>
+                <div>
+
+                    <%if (!Seguridad.Validacion.SesionActiva(Session["userInSession"]))
+                        { %>
+                    <a href="Login.aspx" class="btn btn-success me-3">LOG IN</a>
+                    <a href="Register.aspx" class="btn btn-outline-success me-3">SIGN UP</a>
+                    <%  }
+                        else
+                        { %>
+                    <asp:Label ID="lblUser" runat="server" CssClass="form-label text-light me-1" Text=""></asp:Label>
+                    <asp:Image ID="imgprofileNav" runat="server" Style="height: 40px; width: 40px; border-radius: 50%; background-color: gray" CssClass="me-1 rounded-circle" />
+                    <asp:Button ID="btnLogOut" CssClass="btn btn-secondary" OnClick="btnLogOut_Click" runat="server" Text="LOG OUT" />
+                    <%  } %>
                 </div>
 
             </div>
+        </nav>
 
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- Columna Izquierda: Navegación (visible solo en pantallas grandes) -->
+                <div class="col-3 d-none d-xl-block d-xxl-block justify-content-start align-items-start border-end">
+                    <ul class="list-group flex-column w-100">
+                        <li class="list-group-item border-0 w-100">
+                            <a class="custom-link" href="Default.aspx">Inicio</a>
+                        </li>
+                        <li class="list-group-item border-0">
+                            <a class="custom-link" href="#">Notificaciones</a>
+                        </li>
+                        <li class="list-group-item border-0">
+                            <a class="custom-link" href="#">Mensajes</a>
+                        </li>
+                        <li class="list-group-item border-0">
+                            <a class="custom-link" href="#">Favoritos</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Columna Central: Publicaciones (Siempre visible) -->
+                <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 col-sm-12 justify-content-center container-fluid">
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+
+                <!-- Columna Derecha (visible solo en pantallas medianas y grandes) -->
+                <div class="col-3 d-none d-xxl-block d-xl-block d-lg-block justify-content-end border-start">
+                    <h3 class="">Contenido adicional</h3>
+                    <!-- Aquí puedes colocar cualquier otro contenido que desees -->
+                </div>
+
+            </div>
         </div>
+
     </form>
 </body>
 </html>
