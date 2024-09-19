@@ -42,7 +42,7 @@ namespace RedSocial
                     if (negocio.LogIn(user))
                     {
                         Session.Add("userInSession", user);
-                        Response.Redirect("Profile.aspx", false);
+                        Response.Redirect("Default.aspx", false);
                     }
                     else
                     {

@@ -2,15 +2,25 @@
 }
 
 .custom-link {
-    color: black;  /*Color del texto*/ 
-    text-decoration: none;  /*Eliminar subrayado*/ 
+    color: black; /*Color del texto*/
+    text-decoration: none; /*Eliminar subrayado*/
 }
 
-.custom-link:hover {
-    color: #fff;  /*Mantener el color del texto al pasar el mouse*/
-    background-color: #555;  /*Color de fondo más claro al pasar el mouse*/ 
-}
+    .custom-link:hover {
+        color: #fff; /*Mantener el color del texto al pasar el mouse*/
+        background-color: #555; /*Color de fondo más claro al pasar el mouse*/
+    }
 
 .list-group-item:hover {
-    background-color: #555;  /*Color de fondo más claro al pasar el mouse*/ 
+    background-color: #555; /*Color de fondo más claro al pasar el mouse*/
+}
+
+/* Estiliza el menú desplegable para que esté alineado */
+.dropdown-menu {
+    display: none; /* Oculto por defecto */
+    position: absolute; /* Posicionamiento absoluto respecto al contenedor */
+    right: 0; /* Alinea el menú a la derecha */
+    top: 100%; /* Posiciona justo debajo del elemento activador */
+    z-index: 1000; /* Asegura que el menú esté encima de otros elementos */
+    will-change: auto; /* No cambiará de posición al hacer clic */
 }

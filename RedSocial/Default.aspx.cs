@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using Dominio;
 using Negocio;
 using System.IO;
+using System.Data.SqlClient;
 
 namespace RedSocial
 {
@@ -27,15 +28,26 @@ namespace RedSocial
                     // Verifica si tienen imagen de perfil, si no, le asigna una por defecto
                     foreach (Publicacion p in posts)
                     {
-                        string rutaImages = Server.MapPath($"~/Images/Profiles/{p.FotoPerfil}");
+                        string rutaProfilesImages = Server.MapPath($"~/Uploads/Images/Profiles/{p.FotoPerfil}");
+                        string rutaPostsImages = Server.MapPath($"~/Uploads/Images/Posts/{p.ImagenPublicacion}");
+                        string rutaPostsVideos = Server.MapPath($"~/Uploads/Videos/{p.VideoPublicacion}");
 
-                        if (File.Exists(rutaImages))
+                        if (File.Exists(rutaPostsImages))
+                            p.ImagenPublicacion = ResolveUrl($"~/Uploads/Images/Posts/{p.ImagenPublicacion}");
+
+                        if (File.Exists(rutaProfilesImages))
                         {
-                            p.FotoPerfil = ResolveUrl($"~/Images/Profiles/{p.FotoPerfil}");
+                            p.FotoPerfil = ResolveUrl($"~/Uploads/Images/Profiles/{p.FotoPerfil}");
                         }
                         else
                         {
-                            p.FotoPerfil = ResolveUrl("~/Images/Profiles/ProfileDefault.jpg");
+                            p.FotoPerfil = ResolveUrl("~/Uploads/Images/Profiles/ProfileDefault.jpg");
+                        }
+
+                        if (File.Exists(rutaPostsVideos))
+                        {
+                            p.VideoPublicacion = ResolveUrl($"~/Uploads/Videos/{p.VideoPublicacion}");
+                            
                         }
                     }
 
@@ -62,29 +74,128 @@ namespace RedSocial
             {
                 try
                 {
-                    lblSuperiorError.Text = string.Empty;
                     Usuario userLogged = (Usuario)Session["userInSession"];
-
-                    string contenido = txtPosteo.Text;
+                    int idTipoPost = int.Parse(ddlTypePost.SelectedValue);
                     int idUser = userLogged.Id;
-                    string nombreUsuario = userLogged.Nombre;
                     DateTime date = DateTime.Now;
                     int? idPublucacionCopartida = null;
-                    int idTipoPost = int.Parse(ddlTypePost.SelectedValue);
+                    string imagenPost;
+                    string videoPost;
+                    string contenido = null;
 
-                    Publicacion newPost = new Publicacion()
+                    if (!string.IsNullOrWhiteSpace(txtPosteo.Text))
+                        contenido = txtPosteo.Text;
+
+
+                    switch (idTipoPost)
                     {
-                        IdUsuario = idUser,
-                        Fecha = date,
-                        Texto = contenido,
-                        IdPublicacionCompartida = idPublucacionCopartida
-                    };
+                        case 1:
+                            lblSuperiorError.Text = string.Empty;
+                            string nombreUsuario = userLogged.Nombre;
+                            imagenPost = null;
+                            videoPost = null;
 
-                    newPost.IdTipoPublicacion = new TipoPublicacion();
-                    newPost.IdTipoPublicacion.Id = idTipoPost;
+                            Publicacion newPost = new Publicacion()
+                            {
+                                IdUsuario = idUser,
+                                Fecha = date,
+                                Texto = contenido,
+                                IdPublicacionCompartida = idPublucacionCopartida,
+                                ImagenPublicacion = imagenPost,
+                                VideoPublicacion = videoPost
+                            };
+                            newPost.IdTipoPublicacion = new TipoPublicacion();
+                            newPost.IdTipoPublicacion.Id = idTipoPost;
 
-                    negocio.CreatePost(newPost);
-                    txtPosteo.Text = string.Empty;
+                            negocio.CreatePost(newPost);
+                            txtPosteo.Text = string.Empty;
+                            break;
+
+                        case 2:
+                            if (fuVideosPost.HasFile)
+                            {
+                                imagenPost = null;
+                                string rutaServidor = Server.MapPath("~");
+
+                                // Extensiones de video permitidas
+                                string[] extensionesVideos = { ".mp4", ".wmv", ".3gp" };
+
+                                // Obtiene la extensión del video subido
+                                string extensionVideo = Path.GetExtension(fuVideosPost.FileName).ToLower();
+
+                                if (extensionesVideos.Contains(extensionVideo))
+                                {
+                                    lblSuperiorError.Text = string.Empty;
+
+                                    videoPost = Seguridad.Utilidades.SaveVideo(fuVideosPost.PostedFile, rutaServidor);
+
+                                    // Crea el post
+                                    Publicacion newPostVideo = new Publicacion()
+                                    {
+                                        IdUsuario = idUser,
+                                        Fecha = date,
+                                        Texto = contenido,
+                                        IdPublicacionCompartida = idPublucacionCopartida,
+                                        ImagenPublicacion = imagenPost,
+                                        VideoPublicacion = videoPost
+                                    };
+                                    newPostVideo.IdTipoPublicacion = new TipoPublicacion();
+                                    newPostVideo.IdTipoPublicacion.Id = idTipoPost;
+
+                                    negocio.CreatePost(newPostVideo);
+                                }
+                                else
+                                {
+                                    lblSuperiorError.Text = "Solo videos en formato mp4, wmv o 3gp";
+                                    return;
+                                }
+                            }
+                            break;
+
+                        case 3:
+                            if (fuFotosPost.HasFile)
+                            {
+                                string rutaServidor = Server.MapPath("~");
+
+                                // Lista de extensiones de imagenes permitidas
+                                string[] extensionesImagenes = { ".jpg", ".jpeg", ".png", ".gif", ".jfif", ".webp" };
+
+                                // Obtiene la extensión de la imagen subida
+                                string extensionImagen = Path.GetExtension(fuFotosPost.FileName).ToLower();
+                                // Verifica si la extensión del archivo subido está en la lista de extensiones permitidas
+                                if (extensionesImagenes.Contains(extensionImagen))
+                                {
+                                    videoPost = null;
+                                    lblSuperiorError.Text = string.Empty;
+
+                                    // Guarda la imagen en la carpeta "Posts"
+                                    imagenPost = Seguridad.Utilidades.GuardarImagen(fuFotosPost.PostedFile, userLogged, rutaServidor, "Posts");
+
+                                    // Crear el post con la información de la imagen
+                                    Publicacion newPostFoto = new Publicacion()
+                                    {
+                                        IdUsuario = idUser,
+                                        Fecha = date,
+                                        Texto = contenido,
+                                        IdPublicacionCompartida = idPublucacionCopartida,
+                                        VideoPublicacion = videoPost,
+                                        ImagenPublicacion = imagenPost
+                                    };
+                                    newPostFoto.IdTipoPublicacion = new TipoPublicacion();
+                                    newPostFoto.IdTipoPublicacion.Id = idTipoPost;
+
+                                    negocio.CreatePost(newPostFoto);
+                                }
+                                else
+                                {
+                                    lblSuperiorError.Text = "Solo imágenes png, jpg, jpeg, gif, jfif y webp";
+                                    return;
+                                }
+
+                            }
+                            break;
+                    }
+
                     Response.Redirect("Default.aspx", false);
                 }
                 catch (Exception ex)

@@ -16,5 +16,7 @@ namespace Dominio
         public string Texto { get; set; }
         public string FotoPerfil { get; set; }
         public int? IdPublicacionCompartida { get; set; }
+        public string ImagenPublicacion { get; set; }
+        public string VideoPublicacion { get; set; }
     }
 }

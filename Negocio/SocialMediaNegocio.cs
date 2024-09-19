@@ -24,6 +24,8 @@ namespace Negocio
 				datos.SetearParametro("@idTipoPost", post.IdTipoPublicacion.Id); 
 				datos.SetearParametro("@texto", post.Texto); 
 				datos.SetearParametro("@idPublicacionCompartida", post.IdPublicacionCompartida);
+				datos.SetearParametro("@imagenPublicacion", post.ImagenPublicacion);
+				datos.SetearParametro("@videoPublicacion", post.VideoPublicacion);
 				datos.EjecutarAccion();
 
 			}
@@ -58,7 +60,8 @@ namespace Negocio
 					post.IdTipoPublicacion.Id = (int)datos.Lector["idTipoPublicacion"];
 					post.IdTipoPublicacion.Descripcion = (string)datos.Lector["nombreUsuario"];
 
-                    post.Texto = (string)datos.Lector["texto"];
+					if (!(datos.Lector["texto"] is DBNull))
+						post.Texto = (string)datos.Lector["texto"];
 
 					if (!(datos.Lector["idPublicacionCompartida"] is DBNull))
 						post.IdPublicacionCompartida = (int)datos.Lector["idPublicacionCompartida"];
@@ -66,7 +69,13 @@ namespace Negocio
                     if (!(datos.Lector["fotoPerfil"] is DBNull))
 						post.FotoPerfil = (string)datos.Lector["fotoPerfil"];
 
-					posts.Add(post);
+					if (!(datos.Lector["imagenPublicacion"] is DBNull))
+						post.ImagenPublicacion = (string)datos.Lector["imagenPublicacion"];
+
+                    if (!(datos.Lector["videoPublicacion"] is DBNull))
+                        post.VideoPublicacion = (string)datos.Lector["videoPublicacion"];
+
+                    posts.Add(post);
                 }
 
                 // Verifica si la lista está vacía

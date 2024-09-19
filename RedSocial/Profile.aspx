@@ -8,7 +8,7 @@
         let imgImagePreviewClientId = "<%= imgImagePreview.ClientID %>";
     </script>
     <%--Enlace al archivo js con la función previewImage()--%>
-    <script src="JS/Profile/previsualizarImagen.js"></script>
+    <script src="JS/Global/previsualizarImagen.js"></script>
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -47,7 +47,7 @@
 
                             <!-- Para cambiar la imagen de perfil -->
                             <label for="fuProfileImage" class="form-label">Profile image</label>
-                            <asp:FileUpload ID="fuProfileImage" CssClass="form-control" accept=".jpg,.jpeg,.png,.gif" OnChange="previewImage()" runat="server" />
+                            <asp:FileUpload ID="fuProfileImage" CssClass="form-control" accept=".jpg,.jpeg,.png,.gif" OnChange="previewImage(fuProfileImageClientId, imgImagePreviewClientId)" runat="server" />
                             <!-- Para ver la imagen seleccionada -->
                             <asp:Image ID="imgImagePreview" CssClass="img-thumbnail img-fluid mt-3" runat="server" />
 

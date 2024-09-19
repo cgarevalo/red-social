@@ -23,7 +23,7 @@ namespace RedSocial
                 if (!String.IsNullOrEmpty(user.Nombre))
                     lblUser.Text = user.Nombre;
 
-                imgprofileNav.ImageUrl = Seguridad.Utilidades.GetProfileImage(user, Server.MapPath("~"));
+                imgProfileNav.ImageUrl = Seguridad.Utilidades.GetProfileImage(user, Server.MapPath("~"));
             }
         }
 

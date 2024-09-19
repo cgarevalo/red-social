@@ -1,0 +1,29 @@
+﻿/* Clase para ajustar la imagen a un tamaño fijo manteniendo la proporción */
+.img-preview {
+    max-width: 100%; /* Asegura que la imagen no exceda el ancho del contenedor */
+    max-height: 300px; /* Establece una altura máxima */
+    height: auto; /* Mantiene la proporción de la imagen */
+    display: block; /* Alinea la imagen correctamente */
+    margin: 0 auto; /* Centra la imagen horizontalmente */
+    border-radius: 8px; /* Bordes redondeados para darle un toque moderno */
+    object-fit: contain; /* Ajusta la imagen para que quepa dentro del contenedor sin recortarla */
+}
+
+.video-preview {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* Asegura que el contenido mantenga su proporción */
+    aspect-ratio: 16 / 9; /* Proporción típica de video */
+    border-radius: 8px; /* Bordes redondeados para darle un toque moderno */
+    background-color: #f0f0f0; /* Fondo gris suave para evitar bordes bruscos */
+}
+
+.preview-container {
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+    max-height: 300px; /* Limita la altura máxima */
+    display: flex;
+    justify-content: center; /* Centra el contenido */
+    align-items: center; /* Centra el contenido verticalmente */
+    position: relative; /* Necesario para posicionar el botón de cierre */
+    overflow: hidden; /* Oculta el desbordamiento */
+}

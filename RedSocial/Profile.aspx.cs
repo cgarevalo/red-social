@@ -70,7 +70,7 @@ namespace RedSocial
                         string extensionArchivo = Path.GetExtension(fuProfileImage.FileName).ToLower();
 
                         // Lista de extensiones de imagenes permitidas
-                        string[] extensiones = { ".jpg", ".jpeg", ".png", ".gif" };
+                        string[] extensiones = { ".jpg", ".jpeg", ".png", ".gif", ".jfif", ".webp" };
 
                         // Verifica si la extensión del archivo subido está en la lista de extensiones permitidas
                         if (extensiones.Contains(extensionArchivo))
@@ -78,7 +78,7 @@ namespace RedSocial
                             lblError.Text = string.Empty;
 
                             // Asigna el nombre de la imagen a UrlImagenPerfil de Usuario y la guarda
-                            userMod.FotoPerfil = Seguridad.Utilidades.GuardarImagen(fuProfileImage.PostedFile, userMod, Server.MapPath("~"));
+                            userMod.FotoPerfil = Seguridad.Utilidades.GuardarImagen(fuProfileImage.PostedFile, userMod, Server.MapPath("~"), "Profile");
 
                             // Carga la imagen en el imgProfile
                             imgProfile.ImageUrl = Seguridad.Utilidades.GetProfileImage(userMod, Server.MapPath("~"));
@@ -86,7 +86,7 @@ namespace RedSocial
                         else
                         {
                             // Si la extensión no es válida, muestra un mensaje de error y sale
-                            lblError.Text = "Solo imágenes png, jpg, jpeg y gif";
+                            lblError.Text = "Solo imágenes png, jpg, jpeg, gif, jfif y webp";
                             return;
                         }
                     }

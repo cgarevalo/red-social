@@ -70,9 +70,16 @@
     <Content Include="Default.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="Estilos\Clases.css" />
+    <Content Include="Estilos\Limite-videos.css" />
+    <Content Include="Estilos\Limites.css" />
     <Content Include="Global.asax" />
     <Content Include="JS\default\activar-desactivar-btnCreatePost.js" />
-    <Content Include="JS\Profile\previsualizarImagen.js" />
+    <Content Include="JS\default\Limpiar.js" />
+    <Content Include="JS\default\mostrar-FileLoad.js" />
+    <Content Include="JS\Global\limpiarVideo.js" />
+    <Content Include="JS\Global\previsualizarVideo.js" />
+    <Content Include="JS\Master\js-menus.js" />
+    <Content Include="JS\Global\previsualizarImagen.js" />
     <Content Include="Login.aspx" />
     <Content Include="Profile.aspx" />
     <Content Include="Register.aspx" />
@@ -138,8 +145,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Images\Profiles\" />
+    <Folder Include="JS\Profile\" />
     <Folder Include="Models\" />
+    <Folder Include="Uploads\Images\Posts\" />
+    <Folder Include="Uploads\Images\Profiles\" />
+    <Folder Include="Uploads\Videos\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dominio\Dominio.csproj">

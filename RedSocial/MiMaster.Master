@@ -15,6 +15,13 @@
 
     <%--JavaScript--%>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <%--<script>
+        let imgProfileNavClienId = "<%= imgProfileNav.ClientID %>";
+        let profileMenuClientId = "profileMenu";
+    </script>
+    <script src="JS/Master/js-menus.js"></script>--%>
+
     <%--JavaScript--%>
 
     <%--CSS--%>
@@ -67,9 +74,21 @@
                     <%  }
                         else
                         { %>
-                    <asp:Label ID="lblUser" runat="server" CssClass="form-label text-light me-1" Text=""></asp:Label>
-                    <asp:Image ID="imgprofileNav" runat="server" Style="height: 40px; width: 40px; border-radius: 50%; background-color: gray" CssClass="me-1 rounded-circle" />
-                    <asp:Button ID="btnLogOut" CssClass="btn btn-secondary" OnClick="btnLogOut_Click" runat="server" Text="LOG OUT" />
+
+                    <div class="dropdown">
+                        <asp:Label ID="lblUser" runat="server" CssClass="form-label text-light me-1" Text=""></asp:Label>
+                        <asp:Image ID="imgProfileNav" runat="server" Style="height: 40px; width: 40px; border-radius: 50%; background-color: gray; cursor: pointer;" CssClass="me-1 rounded-circle dropdown-toggle" data-bs-toggle="dropdown" />
+
+                        <!-- Menú desplegable que aparece al hacer clic en la imagen -->
+                        <ul class="dropdown-menu dropdown-menu-end" id="profileMenu">
+                            <li><a class="dropdown-item" href="Profile.aspx">My profile</a></li>
+                            <li><a class="dropdown-item" href="#">Configuración</a></li>
+                            <li>
+                                <asp:Button ID="btnLogOut" CssClass="dropdown-item" OnClick="btnLogOut_Click" runat="server" Text="LOG OUT" />
+                            </li>
+                        </ul>
+                    </div>
+
                     <%  } %>
                 </div>
 
@@ -111,7 +130,6 @@
 
             </div>
         </div>
-
     </form>
 </body>
 </html>
