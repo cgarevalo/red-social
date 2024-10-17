@@ -74,6 +74,7 @@
     <Content Include="Estilos\Limites.css" />
     <Content Include="Global.asax" />
     <Content Include="JS\default\activar-desactivar-btnCreatePost.js" />
+    <Content Include="JS\default\chequearPost.js" />
     <Content Include="JS\default\Limpiar.js" />
     <Content Include="JS\default\mostrar-FileLoad.js" />
     <Content Include="JS\Global\limpiarVideo.js" />

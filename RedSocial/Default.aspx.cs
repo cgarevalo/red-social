@@ -22,43 +22,7 @@ namespace RedSocial
             {
                 if (!IsPostBack)
                 {
-                    List<TipoPublicacion> tipoPosts = negocio.ListarTipoPosts();
-                    List<Publicacion> posts = negocio.ListarPosts();
-
-                    // Verifica si tienen imagen de perfil, si no, le asigna una por defecto
-                    foreach (Publicacion p in posts)
-                    {
-                        string rutaProfilesImages = Server.MapPath($"~/Uploads/Images/Profiles/{p.FotoPerfil}");
-                        string rutaPostsImages = Server.MapPath($"~/Uploads/Images/Posts/{p.ImagenPublicacion}");
-                        string rutaPostsVideos = Server.MapPath($"~/Uploads/Videos/{p.VideoPublicacion}");
-
-                        if (File.Exists(rutaPostsImages))
-                            p.ImagenPublicacion = ResolveUrl($"~/Uploads/Images/Posts/{p.ImagenPublicacion}");
-
-                        if (File.Exists(rutaProfilesImages))
-                        {
-                            p.FotoPerfil = ResolveUrl($"~/Uploads/Images/Profiles/{p.FotoPerfil}");
-                        }
-                        else
-                        {
-                            p.FotoPerfil = ResolveUrl("~/Uploads/Images/Profiles/ProfileDefault.jpg");
-                        }
-
-                        if (File.Exists(rutaPostsVideos))
-                        {
-                            p.VideoPublicacion = ResolveUrl($"~/Uploads/Videos/{p.VideoPublicacion}");
-                            
-                        }
-                    }
-
-                    // Enlazar los datos al Repeater
-                    repPosts.DataSource = posts;
-                    repPosts.DataBind();
-
-                    ddlTypePost.DataSource = tipoPosts;
-                    ddlTypePost.DataValueField = "Id";
-                    ddlTypePost.DataTextField = "Descripcion";
-                    ddlTypePost.DataBind();
+                    CargarDatos();
                 }
             }
             catch (Exception ex)
@@ -108,7 +72,6 @@ namespace RedSocial
                             newPost.IdTipoPublicacion.Id = idTipoPost;
 
                             negocio.CreatePost(newPost);
-                            txtPosteo.Text = string.Empty;
                             break;
 
                         case 2:
@@ -196,7 +159,18 @@ namespace RedSocial
                             break;
                     }
 
-                    Response.Redirect("Default.aspx", false);
+                    if (idTipoPost == 2 || idTipoPost == 3)
+                    {
+                        // Forzar postback completo
+                        //ScriptManager.GetCurrent(Page).RegisterPostBackControl(btnCreatePost);
+                        Response.Redirect("Default.aspx", false);
+                    }
+                    else
+                    {
+                        CargarDatos();
+                        Limpiar();
+                        upPosts.Update();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -210,6 +184,84 @@ namespace RedSocial
                 Response.Redirect("Login.aspx", false);
                 return;
             }
+        }
+
+        private void CargarDatos()
+        {
+            List<Publicacion> posts = negocio.ListarPosts();
+
+            CargarTiposPosts();
+            CargarFotosPerfiles(posts);
+            CargarImagenesPosts(posts);
+            CargarVideosPosts(posts);
+
+            // Enlazar los datos al Repeater
+            repPosts.DataSource = posts;
+            repPosts.DataBind();
+        }
+
+        private void CargarTiposPosts()
+        {
+            List<TipoPublicacion> tipoPosts = negocio.ListarTipoPosts();
+
+            ddlTypePost.DataSource = tipoPosts;
+            ddlTypePost.DataValueField = "Id";
+            ddlTypePost.DataTextField = "Descripcion";
+            ddlTypePost.DataBind();
+        }
+
+        private void CargarFotosPerfiles(List<Publicacion> posts)
+        {
+            foreach (Publicacion p in posts)
+            {
+                string rutaProfilesImages = Server.MapPath($"~/Uploads/Images/Profiles/{p.FotoPerfil}");
+
+                if (File.Exists(rutaProfilesImages))
+                {
+                    p.FotoPerfil = ResolveUrl($"~/Uploads/Images/Profiles/{p.FotoPerfil}");
+                }
+                else
+                {
+                    p.FotoPerfil = ResolveUrl("~/Uploads/Images/Profiles/ProfileDefault.jpg");
+                }
+            }
+
+        }
+
+        private void CargarImagenesPosts(List<Publicacion> posts)
+        {
+            foreach (Publicacion p in posts)
+            {
+                string rutaPostsImages = Server.MapPath($"~/Uploads/Images/Posts/{p.ImagenPublicacion}");
+
+                if (File.Exists(rutaPostsImages))
+                {
+                    p.ImagenPublicacion = ResolveUrl($"~/Uploads/Images/Posts/{p.ImagenPublicacion}");
+                }
+            }
+        }
+
+        private void CargarVideosPosts(List<Publicacion> post)
+        {
+            foreach (Publicacion p in post)
+            {
+                string rutaPostsVideos = Server.MapPath($"~/Uploads/Videos/{p.VideoPublicacion}");
+
+                if (File.Exists(rutaPostsVideos))
+                {
+                    p.VideoPublicacion = ResolveUrl($"~/Uploads/Videos/{p.VideoPublicacion}");
+
+                }
+            }
+        }
+
+        private void Limpiar()
+        {
+            // Limpia el contenido del TextBox
+            txtPosteo.Text = string.Empty;
+
+            // Llama a las funciones JavaScript para limpiar la previsualización de imágenes y videos
+            //ScriptManager.RegisterStartupScript(this, this.GetType(), "limpiarPrevisualizaciones", "clearVideoPreview(); clearImagePreview()", true);
         }
     }
 }

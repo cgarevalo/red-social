@@ -33,21 +33,26 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+    <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true"></asp:ScriptManager>
 
     <div class="mt-3 border p-3 rounded shadow-sm mb-3">
         <h3 class="mb-3">¿Qué estás pensando?</h3>
 
-        <asp:TextBox ID="txtPosteo" CssClass="form-control border-0" TextMode="MultiLine" Rows="3" PlaceHolder="Escribe tu publicación..." runat="server" onkeyup="checkInput()"></asp:TextBox>
-        <div class="d-flex mt-3">
-            <div class="col-8">
-                <asp:DropDownList ID="ddlTypePost" CssClass="form-control" runat="server" onchange="toggleFileUpload()"></asp:DropDownList>
-            </div>
+        <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Always">
+            <ContentTemplate>
+                <asp:TextBox ID="txtPosteo" CssClass="form-control border-0" TextMode="MultiLine" Rows="3" PlaceHolder="Escribe tu publicación..." runat="server" onkeyup="checkInput()"></asp:TextBox>
 
-            <div class="">
-                <asp:Button ID="btnCreatePost" CssClass="btn btn-dark ms-5 rounded-5 w-100" runat="server" OnClick="btnCreatePost_Click" Enabled="false" Text="post" />
-            </div>
-        </div>
+                <div class="d-flex mt-3">
+                    <div class="col-8">
+                        <asp:DropDownList ID="ddlTypePost" CssClass="form-control" runat="server" onchange="toggleFileUpload()"></asp:DropDownList>
+                    </div>
+
+                    <div class="">
+                        <asp:Button ID="btnCreatePost" CssClass="btn btn-dark ms-5 rounded-5 w-100" runat="server" OnClick="btnCreatePost_Click" Enabled="false" Text="post" />
+                    </div>
+                </div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
 
         <!-- Controles de subida de archivos -->
         <div id="divFuFotos" class="mt-3 col-8" style="display: none;" runat="server">
@@ -79,7 +84,7 @@
         <asp:Label ID="lblSuperiorError" runat="server" CssClass="form-label text-danger" Text=""></asp:Label>
     </div>
 
-    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+    <asp:UpdatePanel ID="upPosts" UpdateMode="Conditional" runat="server">
         <ContentTemplate>
             <asp:Repeater ID="repPosts" runat="server">
                 <ItemTemplate>
